@@ -6,44 +6,107 @@
     <title>Student Finance Tracker</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
+
 <body>
-    <!-- Transaction History Section -->
-<section id="transaction_History">  <!-- What should the id be? -->
-    <h2>Transaction History</h2>  <!-- What should the heading say? -->
+<header>
+    <h1>Student Finance Tracker</h1>
+    <nav>
+        <ul>
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="#transaction-history">Transactions</a></li>
+            <li><a href="#transaction-form">Add New</a></li>
+            <li><a href="about.html">About</a></li>
+        </ul>
+    </nav>
+</header>
+<main id="main-content">
+    <!-- Dashboard Section -->
+<section id="dashboard">
+    <h2>Dashboard</h2>
     
-    <div id="transaction-container">  <!-- What id makes sense for the list container? -->
+    <!-- Stats Grid - 4 stat cards -->
+    <div class="stats-grid">
+        
+        <!-- Stat Card 1: Total Transactions -->
+        <div class="stat-card">
+            <h3>Transaction Count</h3>  <!-- What's this stat called? -->
+            <p id="total-count">0</p>  <!-- Starting value? -->
+        </div>
+        
+        <!-- Stat Card 2: Total Spent -->
+        <div class="stat-card">
+            <h3>Total Spent</h3>  <!-- What's this stat called? -->
+            <p id="total-spent">$0.00</p>  <!-- Starting value? -->
+        </div>
+        
+        <!-- Stat Card 3: Top Category -->
+        <div class="stat-card">
+            <h3>Top Category</h3>  <!-- What's this stat called? -->
+            <p id="top-category">None</p>  <!-- What shows when empty? -->
+        </div>
+        
+        <!-- Stat Card 4: Last 7 Days -->
+        <div class="stat-card">
+            <h3>Last 7 Days</h3>  <!-- What's this stat called? -->
+            <p id="last-7-days">$0.00</p>  <!-- Starting value? -->
+        </div>
+        
+    </div>
+    
+    <!-- Budget Cap (for showing leftover!) -->
+    <div class="budget-section">
+        <h3>Monthly Budget</h3>
+        <label for="budget-cap">Set your monthly budget: $</label>
+        <input type="number" id="budget-cap" value="500" min="0" step="0.01">
+        <p id="budget-status"></p>  <!-- JavaScript will update this with remaining/overage -->
+    </div>
+</section>
+
+<!-- Transaction History Section -->
+<section id="transaction-history">  
+    <h2>Transaction History</h2>  
+    
+    <div id="transaction-container">  
         <!-- Transactions will appear here via JavaScript -->
         <p class="empty-message">No transactions yet. Add your first one below!</p>  <!-- What message when empty? -->
     </div>
 </section>
 <!-- Transaction Form Section -->
-<section id="transaction_form">
-    <h2>???</h2>
+<section id="transaction-form">
+    <h2>Add New Transaction</h2>
     
-    <form id="transaction-form">
+    <form id="Add-form">
         <!-- Description input -->
-        <label for="description">???</label>
-        <input type="???" id="description" required>
+        <label for="description">Description</label>
+        <input type="text" id="description" required>
         
         <!-- Amount input -->
-        <label for="amount">???</label>
-        <input type="???" id="amount" required>
+        <label for="amount">Amount</label>
+        <input type="number" id="amount" required step="0.01" min="0">
         
         <!-- Category dropdown -->
-        <label for="category">???</label>
+        <label for="category">Category</label>
         <select id="category" required>
-            <option value="">-- Select Category --</option>
+            <option value="Food">Food</option>
+            <option value="Books">Books</option>
+            <option value="Transport">Transport</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Fees">Fees</option>
+            <option value="Other">Other</option>
             <!-- Add more options here -->
         </select>
         
         <!-- Date input -->
-        <label for="date">???</label>
-        <input type="???" id="date" required>
+        <label for="date">Date</label>
+        <input type="date" id="date" required>
         
         <!-- Submit button -->
-        <button type="submit">???</button>
+        <button type="submit">Save</button>
     </form>
-</section>
+</section>  
+</main>
 </body>
 <script src="script.js"></script>
 </html>
+
