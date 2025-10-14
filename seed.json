@@ -1,0 +1,110 @@
+[
+  {
+    "id": "txn_001",
+    "description": "Lunch at cafeteria",
+    "amount": 12.50,
+    "category": "Food",
+    "date": "2025-10-12",
+    "createdAt": "2025-10-12T12:00:00Z",
+    "updatedAt": "2025-10-12T12:00:00Z"
+  },
+  {
+    "id": "txn_002",
+    "description": "Chemistry textbook",
+    "amount": 89.99,
+    "category": "Books",
+    "date": "2025-10-05",
+    "createdAt": "2025-10-05T14:00:00Z",
+    "updatedAt": "2025-10-05T14:00:00Z"
+  },
+  {
+    "id": "txn_003",
+    "description": "Monthly bus pass",
+    "amount": 45.00,
+    "category": "Transport",
+    "date": "2025-10-01",
+    "createdAt": "2025-10-01T09:00:00Z",
+    "updatedAt": "2025-10-01T09:00:00Z"
+  },
+  {
+    "id": "txn_004",
+    "description": "Coffee with friends",
+    "amount": 8.75,
+    "category": "Entertainment",
+    "date": "2025-10-11",
+    "createdAt": "2025-10-11T16:30:00Z",
+    "updatedAt": "2025-10-11T16:30:00Z"
+  },
+  {
+    "id": "txn_005",
+    "description": "Semester registration fee",
+    "amount": 350.00,
+    "category": "Fees",
+    "date": "2025-09-28",
+    "createdAt": "2025-09-28T10:00:00Z",
+    "updatedAt": "2025-09-28T10:00:00Z"
+  },
+  {
+    "id": "txn_006",
+    "description": "Grocery shopping",
+    "amount": 42.30,
+    "category": "Food",
+    "date": "2025-10-08",
+    "createdAt": "2025-10-08T18:00:00Z",
+    "updatedAt": "2025-10-08T18:00:00Z"
+  },
+  {
+    "id": "txn_007",
+    "description": "Movie tickets",
+    "amount": 15.00,
+    "category": "Entertainment",
+    "date": "2025-10-06",
+    "createdAt": "2025-10-06T20:00:00Z",
+    "updatedAt": "2025-10-06T20:00:00Z"
+  },
+  {
+    "id": "txn_008",
+    "description": "USB flash drive",
+    "amount": 12.99,
+    "category": "Other",
+    "date": "2025-10-09",
+    "createdAt": "2025-10-09T11:00:00Z",
+    "updatedAt": "2025-10-09T11:00:00Z"
+  },
+  {
+    "id": "txn_009",
+    "description": "Pizza delivery",
+    "amount": 18.50,
+    "category": "Food",
+    "date": "2025-10-10",
+    "createdAt": "2025-10-10T19:30:00Z",
+    "updatedAt": "2025-10-10T19:30:00Z"
+  },
+  {
+    "id": "txn_010",
+    "description": "Uber to campus",
+    "amount": 7.25,
+    "category": "Transport",
+    "date": "2025-10-07",
+    "createdAt": "2025-10-07T08:15:00Z",
+    "updatedAt": "2025-10-07T08:15:00Z"
+  },
+  {
+    "id": "txn_011",
+    "description": "Study guide book",
+    "amount": 24.99,
+    "category": "Books",
+    "date": "2025-09-30",
+    "createdAt": "2025-09-30T13:00:00Z",
+    "updatedAt": "2025-09-30T13:00:00Z"
+  },
+  {
+    "id": "txn_012",
+    "description": "Breakfast bagel",
+    "amount": 4.50,
+    "category": "Food",
+    "date": "2025-10-11",
+    "createdAt": "2025-10-11T07:45:00Z",
+    "updatedAt": "2025-10-11T07:45:00Z"
+  }
+]
