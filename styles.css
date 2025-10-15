@@ -50,3 +50,9 @@ section h2 {
     color: #35424a;
     margin-bottom: 15px;
 }
+.error-message {
+    color: red;
+    font-size: 0.9em;
+    display: none;
+    margin-top: 5px;
+}

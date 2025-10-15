@@ -80,11 +80,13 @@
         <!-- Description input -->
         <label for="description">Description</label>
         <input type="text" id="description" required>
+        <span class="error-message" id="description-error" aria-live="polite"></span>
         
         <!-- Amount input -->
         <label for="amount">Amount</label>
         <input type="number" id="amount" required step="0.01" min="0">
-        
+        <span class="error-message" id="amount-error" aria-live="polite"></span>
+
         <!-- Category dropdown -->
         <label for="category">Category</label>
         <select id="category" required>
@@ -96,10 +98,12 @@
             <option value="Other">Other</option>
             <!-- Add more options here -->
         </select>
+        <span class="error-message" id="category-error" aria-live="polite"></span>
         
         <!-- Date input -->
         <label for="date">Date</label>
         <input type="date" id="date" required>
+        <span class="error-message" id="date-error" aria-live="polite"></span>
         
         <!-- Submit button -->
         <button type="submit">Save</button>

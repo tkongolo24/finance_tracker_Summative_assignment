@@ -25,8 +25,10 @@ export function clearForm() {
 }
 export function showError(fieldId, message) {
     const errorElement = document.getElementById(fieldId + '-error');
-    errorElement.textContent = message;
-    errorElement.style.display = 'block';
+    if (errorElement) {
+        errorElement.textContent = '';
+        errorElement.style.display = 'none';
+    }
 }
 
 // Update dashboard stats
