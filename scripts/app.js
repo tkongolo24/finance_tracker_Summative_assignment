@@ -27,6 +27,18 @@ function handleFormSubmit(event) {
     const category = document.getElementById('category').value;
     const date = document.getElementById('date').value;
     
+    // grab references to error message spans
+    const descriptionInput = document.getElementById('description');
+    const amountInput = document.getElementById('amount');
+    const categoryInput = document.getElementById('category');
+    const dateInput = document.getElementById('date');
+
+    //When the user starts typing, clear the error message
+    descriptionInput.addEventListener('input', () => clearError('description', ''));
+    amountInput.addEventListener('input', () => clearError('amount', ''));
+    categoryInput.addEventListener('input', () => clearError('category', ''));
+    dateInput.addEventListener('input', () => clearError('date', ''));
+    
     // 2. Validate each field
     if (!validateDescription(description)) {
         showError('description', 'Invalid description');
