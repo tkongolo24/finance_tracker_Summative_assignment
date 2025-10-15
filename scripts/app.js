@@ -1,4 +1,4 @@
-import { initState, addTransaction, deleteTransaction, generateId, getTransactions } from './state.js';
+import { initState, addTransaction, deleteTransaction, generateId, getTransactions, sortTransactions } from './state.js';
 import { renderTransactions, updateDashboard, clearForm, showError, clearError } from './ui.js';
 import { validateDescription, validateAmount, validateDate, validateCategory } from './validators.js';
 
@@ -25,9 +25,15 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('amount').addEventListener('input', () => clearError('amount'));
     document.getElementById('category').addEventListener('input', () => clearError('category'));
     document.getElementById('date').addEventListener('input', () => clearError('date'));
-});
-// For debugging - remove later
-console.log("Form values:", description, amount, category, date);
+
+const sortSelect = document.getElementById('sort-by');
+sortSelect.addEventListener('change', function() {
+    const sortValue = this.value
+    sortTransactions(sortValue);
+    renderTransactions();
+}
+);
+
 
 // Handle form submission
 function handleFormSubmit(event) {
@@ -44,7 +50,7 @@ function handleFormSubmit(event) {
     for (let t of transactions) {
         totalSpent += t.amount;
     }
-    if (totalSpent + amount > budget) {
+    if (totalSpent + parseFloat(amount) > budget) {
         showError('amount', 'Adding this transaction exceeds your budget');
         return;
     }
@@ -100,11 +106,4 @@ function handleDelete(event) {
     }
 }
 
-// budget validation
-const budget = parseFloat(document.getElementById('budget-cap').value);
-const transactions = getTransactions();
-const currentSpent = transactions.reduce((sum, t) => sum + t.amount, 0);
-if (currentSpent + parseFloat(amount) > budget) {
-    alert('Adding this transaction exceeds your budget');
-    return;
-}
+});

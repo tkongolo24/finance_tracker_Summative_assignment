@@ -30,46 +30,56 @@
         
         <!-- Stat Card 1: Total Transactions -->
         <div class="stat-card">
-            <h3>Transaction Count</h3>  <!-- What's this stat called? -->
-            <p id="total-count">0</p>  <!-- Starting value? -->
+            <h3>Transaction Count</h3>  
+            <p id="total-count">0</p>  
         </div>
         
         <!-- Stat Card 2: Total Spent -->
         <div class="stat-card">
-            <h3>Total Spent</h3>  <!-- What's this stat called? -->
-            <p id="total-spent">$0.00</p>  <!-- Starting value? -->
+            <h3>Total Spent</h3>  
+            <p id="total-spent">$0.00</p>  
         </div>
         
         <!-- Stat Card 3: Top Category -->
         <div class="stat-card">
-            <h3>Top Category</h3>  <!-- What's this stat called? -->
-            <p id="top-category">None</p>  <!-- What shows when empty? -->
-        </div>
+            <h3>Top Category</h3>  
+            <p id="top-category">None</p>  
         
         <!-- Stat Card 4: Last 7 Days -->
         <div class="stat-card">
-            <h3>Last 7 Days</h3>  <!-- What's this stat called? -->
-            <p id="last-7-days">$0.00</p>  <!-- Starting value? -->
+            <h3>Last 7 Days</h3>  
+            <p id="last-7-days">$0.00</p>  
         </div>
         
     </div>
     
-    <!-- Budget Cap (for showing leftover!) -->
+    <!-- Budget Cap -->
     <div class="budget-section">
         <h3>Monthly Budget</h3>
         <label for="budget-cap">Set your monthly budget: $</label>
         <input type="number" id="budget-cap" value="500" min="0" step="0.01">
-        <p id="budget-status"></p>  <!-- JavaScript will update this with remaining/overage -->
+        <p id="budget-status"></p>  
     </div>
 </section>
 
 <!-- Transaction History Section -->
 <section id="transaction-history">  
     <h2>Transaction History</h2>  
-    
+    <!-- Sort Dropdown -->
+     <div class="sort-controls">
+        <label for="sort-by">Sort by:</label>
+        <select id="sort-by">
+            <option value="date-desc">Date (Newest)</option>
+            <option value="date-asc">Date (Oldest)</option>
+            <option value="amount-desc">Amount (High to Low)</option>
+            <option value="amount-asc">Amount (Low to High)</option>
+            <option value="description-asc">Category (A-Z)</option>
+            <option value="description-desc">Category (Z-A)</option>
+        </select>
+     </div>
     <div id="transaction-container">  
         <!-- Transactions will appear here via JavaScript -->
-        <p class="empty-message">No transactions yet. Add your first one below!</p>  <!-- What message when empty? -->
+        <p class="empty-message">No transactions yet. Add your first one below!</p>  
     </div>
 </section>
 <!-- Transaction Form Section -->
@@ -86,7 +96,7 @@
         <label for="amount">Amount</label>
         <input type="number" id="amount" required step="0.01" min="0">
         <span class="error-message" id="amount-error" aria-live="polite"></span>
-        <p id="amount-error" class="error-message"></p>
+        
 
         <!-- Category dropdown -->
         <label for="category">Category</label>
@@ -97,16 +107,15 @@
             <option value="Entertainment">Entertainment</option>
             <option value="Fees">Fees</option>
             <option value="Other">Other</option>
-            <!-- Add more options here -->
         </select>
         <span class="error-message" id="category-error" aria-live="polite"></span>
-        <p id="category-error" class="error-message"></p>
+        
 
         <!-- Date input -->
         <label for="date">Date</label>
         <input type="date" id="date" required>
         <span class="error-message" id="date-error" aria-live="polite"></span>
-        <p id="date-error" class="error-message"></p>
+        
 
         <!-- Submit button -->
         <button type="submit">Save</button>

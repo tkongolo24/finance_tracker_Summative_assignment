@@ -28,3 +28,40 @@ export function deleteTransaction(id) {
 export function generateId() {
     return 'txn_' + Date.now();
 }
+
+export function sortTransactions(sortBy) {
+    if (sortBy === 'date-desc') {
+        transactions.sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+            return dateB - dateA;
+        });
+    }
+    else if (sortBy === 'date-asc') {
+        transactions.sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+            return dateA - dateB;
+        });
+    }
+    else if (sortBy === 'amount-desc') {
+        transactions.sort((a, b) => {
+            return b.amount - a.amount;
+        });
+    }
+    else if (sortBy === 'amount-asc') {
+        transactions.sort((a, b) => {
+            return a.amount - b.amount;
+        });
+    }
+    else if (sortBy === 'description-asc') {
+        transactions.sort((a, b) => {
+             return a.description.localeCompare(b.description);
+        });
+    }
+    else if (sortBy === 'description-desc') {
+        transactions.sort((a, b) => {
+            return b.description.localeCompare(a.description);
+        });
+    }
+}
