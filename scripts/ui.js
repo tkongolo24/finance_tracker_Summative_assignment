@@ -15,7 +15,7 @@ export function renderTransactions() {
         html +='<p>$' + t.amount + '</p>';
         html +='<p>' + t.category + '</p>';
         html +='<p>' + t.date + '</p>';
-        html += '<button data-id="' + t.id + '">Delete</button>';
+        html += '<button class="btn-delete" data-id="' + t.id + '">Delete</button>';
         html += '</div>';
     }
     container.innerHTML = html;
@@ -23,13 +23,23 @@ export function renderTransactions() {
 export function clearForm() {
     document.getElementById('Add-form').reset();
 }
+
 export function showError(fieldId, message) {
+    const errorElement = document.getElementById(fieldId + '-error');
+    if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+    }
+}
+export function clearError(fieldId) {
     const errorElement = document.getElementById(fieldId + '-error');
     if (errorElement) {
         errorElement.textContent = '';
         errorElement.style.display = 'none';
     }
 }
+// For debugging - remove later
+console.log("Category totals:", categoryTotals);
 
 // Update dashboard stats
 export function updateDashboard() {
