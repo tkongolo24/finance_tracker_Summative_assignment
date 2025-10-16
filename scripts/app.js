@@ -33,8 +33,10 @@ import { saveTransactions } from './storage.js';
 let currentFilteredTransactions = null; 
 let currentEditId = null;
 
+// Populate Form for Edit
 function populateFormForEdit(id) {
-    const t = getTransactionById(id);
+    const transactions = getTransactions();
+    const t = transactions.find(tx => tx.id === id);
     if (!t) return;
 
     document.getElementById('description').value = t.description;
@@ -42,10 +44,10 @@ function populateFormForEdit(id) {
     document.getElementById('category').value = t.category;
     document.getElementById('date').value = t.date;
 
-    currentEditId = id;
+    const submitBtn = document.querySelector('#Add-form button[type="submit"]');
+    if (submitBtn) submitBtn.textContent = 'Update Transaction';
 
-    // Optionally change form submit button text
-    document.getElementById('submit-btn').textContent = 'Update Transaction';
+    currentEditId = id;
 }
 
 // DOMContentLoaded
@@ -54,35 +56,6 @@ document.addEventListener('DOMContentLoaded', function() {
     renderTransactions();
     updateDashboard();
 
-    container.addEventListener('click', function(event) {
-        if (event.target.classList.contains('btn-edit')) {
-            const id = event.target.getAttribute('data-id');
-            populateFormForEdit(id);
-        }
-    });
-    // Form handler
-    const form = document.getElementById('Add-form');
-    form.addEventListener('submit', handleFormSubmit);
-    if (currentEditId) {
-    // Update transaction
-    const updatedData = {
-        description,
-        amount: parseFloat(amount),
-        category,
-        date
-    };
-    updateTransaction(currentEditId, updatedData);
-    renderTransactions();
-    updateDashboard();
-    clearForm();
-    
-    // Reset
-    currentEditId = null;
-    document.getElementById('submit-btn').textContent = 'Add Transaction';
-    return;
-}
-
-    // Delete handler
     const container = document.getElementById('transaction-container');
     container.addEventListener('click', handleDelete);
 
@@ -104,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
         renderTransactions();
     });
 
-    // Changed 'exportBtn' to 'export-btn' for consistency)
+    // Export handler
     const exportBtn = document.getElementById('export-btn');
     exportBtn.addEventListener('click', () => {
         handleExport(currentFilteredTransactions || getTransactions());
@@ -127,7 +100,11 @@ document.addEventListener('DOMContentLoaded', function() {
             handleSearch();
         }
     });
-}); 
+
+    // Form submit
+    const form = document.getElementById('Add-form');
+    form.addEventListener('submit', handleFormSubmit);
+});
 
 // Handle Export
 function handleExport() {
@@ -141,7 +118,7 @@ function handleExport() {
     link.download = 'transactions.json';
     link.click();
     URL.revokeObjectURL(url);
-} 
+}
 
 // Handle Import
 function handleImport(event) {
@@ -153,7 +130,6 @@ function handleImport(event) {
         try {
             const data = JSON.parse(e.target.result);
 
-            // Changed to !Array.isArray(data)
             if (!Array.isArray(data)) {
                 showImportError('Invalid file format');
                 return;
@@ -165,33 +141,30 @@ function handleImport(event) {
                     return;
                 }
             }
-            //Merge with existing transactions
-            const existing = getTransactions();
-            const merged = [...existingTransactions];
+
+            const existingTransactions = getTransactions();
+            const mergedTransactions = [...existingTransactions];
 
             for (let t of data) {
-                if(!existingTransactions.some(et => et.id === t.id)) {
+                if (!existingTransactions.some(et => et.id === t.id)) {
                     mergedTransactions.push(t);
                 }
             }
 
-            // save merged data
             saveTransactions(mergedTransactions);
             initState();
             renderTransactions();
             updateDashboard();
 
             showImportSuccess(`Imported ${data.length} transactions successfully`);
-        } 
-        catch (error) {
+        } catch (error) {
             showImportError('Error reading file');
         }
     };
     reader.readAsText(file);
 }
 
-
-// Cleaned up showImportError
+// Show Import Messages
 function showImportError(message) {
     const statusEl = document.getElementById('import-status');
     if (statusEl) {
@@ -201,7 +174,6 @@ function showImportError(message) {
     }
 }
 
-// Added missing showImportSuccess function
 function showImportSuccess(message) {
     const statusEl = document.getElementById('import-status');
     if (statusEl) {
@@ -222,7 +194,6 @@ function handleSearch() {
     const isCaseSensitive = document.getElementById('case-sensitive').checked;
     const errorEl = document.getElementById('search-error');
 
-    // If input is empty → show all transactions
     if (!pattern) {
         errorEl.textContent = '';
         renderTransactions();
@@ -231,15 +202,12 @@ function handleSearch() {
 
     const regex = compileRegex(pattern, isCaseSensitive);
 
-    // If regex is invalid
     if (!regex && pattern) {
         errorEl.textContent = 'Invalid regex pattern';
         return;
     }
 
-    // If regex is valid
     errorEl.textContent = '';
-
     const allTransactions = getTransactions();
     const filtered = searchTransactions(allTransactions, regex);
     renderFilteredResults(filtered, regex);
@@ -273,6 +241,8 @@ function renderFilteredResults(transactions, regex) {
     let html = '';
     for (let t of transactions) {
         const highlightedDesc = highlightMatch(t.description, regex);
+        const highlightedAmount = highlightMatch(String(t.amount), regex);
+        const highlightedCategory = highlightMatch(t.category, regex);
 
         html += `
             <div>
@@ -280,6 +250,7 @@ function renderFilteredResults(transactions, regex) {
                 <p>$${highlightedAmount}</p>
                 <p>${highlightedCategory}</p>
                 <p>${t.date}</p>
+                <button class="btn-edit" data-id="${t.id}">Edit</button>
                 <button class="btn-delete" data-id="${t.id}">Delete</button>
             </div>`;
     }
@@ -290,7 +261,6 @@ function renderFilteredResults(transactions, regex) {
 function handleFormSubmit(event) {
     event.preventDefault();
 
-    // Get form values
     const description = document.getElementById('description').value;
     const amount = document.getElementById('amount').value;
     let category = document.getElementById('category').value;
@@ -298,21 +268,16 @@ function handleFormSubmit(event) {
     const budget = parseFloat(document.getElementById('budget-cap').value);
 
     const transactions = getTransactions();
-    let totalSpent = 0;
-    for (let t of transactions) {
-        totalSpent += t.amount;
-    }
+    let totalSpent = transactions.reduce((sum, t) => sum + t.amount, 0);
 
-    if (totalSpent + parseFloat(amount) > budget) {
+    if (totalSpent + parseFloat(amount) > budget && !currentEditId) {
         showError('amount', 'Adding this transaction exceeds your budget');
         return;
     }
 
-    // Normalize category
     category = category.trim();
     category = category[0].toUpperCase() + category.slice(1).toLowerCase();
 
-    // Validate each field
     if (!validateDescription(description)) {
         showError('description', 'Invalid description');
         return;
@@ -330,29 +295,57 @@ function handleFormSubmit(event) {
         return;
     }
 
-    // Create transaction object
-    const transaction = {
-        id: generateId(),
-        description: description,
-        amount: parseFloat(amount),
-        category: category,
-        date: date,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-    };
+    if (currentEditId) {
+        const index = transactions.findIndex(t => t.id === currentEditId);
+        if (index !== -1) {
+            transactions[index] = {
+                ...transactions[index],
+                description,
+                amount: parseFloat(amount),
+                category,
+                date,
+                updatedAt: new Date().toISOString()
+            };
+            saveTransactions(transactions);
+            renderTransactions();
+            updateDashboard();
+            clearForm();
+            currentEditId = null;
 
-    addTransaction(transaction);
-    renderTransactions();
-    updateDashboard();
-    clearForm();
+            const submitBtn = document.querySelector('#Add-form button[type="submit"]');
+            if (submitBtn) submitBtn.textContent = 'Add Transaction';
+
+            alert('Transaction updated successfully!');
+        }
+    } else {
+        const transaction = {
+            id: generateId(),
+            description,
+            amount: parseFloat(amount),
+            category,
+            date,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+
+        addTransaction(transaction);
+        renderTransactions();
+        updateDashboard();
+        clearForm();
+    }
 }
 
-// Handle Delete Button
+
+// Handle Delete
 function handleDelete(event) {
     if (event.target.classList.contains('btn-delete')) {
         const id = event.target.getAttribute('data-id');
         deleteTransaction(id);
         renderTransactions();
         updateDashboard();
+    }
+    if (event.target.classList.contains('btn-edit')) {
+        const id = event.target.getAttribute('data-id');
+        populateFormForEdit(id);
     }
 }
