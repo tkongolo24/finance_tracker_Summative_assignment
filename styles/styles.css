@@ -9,8 +9,8 @@
     --light-gray: #f5f5f5;        /* Page background */
     --white: #ffffff;             /* Card backgrounds */
     --text-dark: #333333;         /* Main text */
-    --text-light: #666666;        /* Secondary text */s
-    --error-red: #ef4444;         /* Error messages */
+    --text-light: #666666;        /* Secondary text */
+    --error-red: red;         /* Error messages */
     --success-green: #ffffff;     /* Success messages */
     
     /* Shadows for depth */
