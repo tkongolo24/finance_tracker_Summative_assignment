@@ -65,3 +65,16 @@ export function sortTransactions(sortBy) {
         });
     }
 }
+export function getTransactionsById(id) {
+    return transactions.find(t => t.id === id);
+}
+
+export function updateTransaction(updatedTransaction) {
+    transactions = transactions.map(t =>{
+        if (t.id === id) {
+            return {...t, ...updatedTransaction, updatedAt: new Date().toISOString()};
+        }
+        return t;
+    });
+    saveTransactions(transactions);
+    }

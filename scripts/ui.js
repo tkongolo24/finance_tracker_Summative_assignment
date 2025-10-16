@@ -17,6 +17,7 @@ export function renderTransactions() {
             <p>$${t.amount}</p>
             <p>${t.category}</p>
             <p>${t.date}</p>
+            <button class="btn-edit" data-id="${t.id}">Edit</button>
             <button class="btn-delete" data-id="${t.id}">Delete</button>
         </div>`;
     }
