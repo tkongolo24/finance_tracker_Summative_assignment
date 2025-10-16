@@ -1,21 +1,19 @@
 export function compileRegex(pattern, isCaseSensitive) {
-    if (!pattern) return null;
-
+    if (!pattern.trim()) return null; 
     try {
-        const flags = isCaseSensitive ? 'g' : 'gi';
-        return new RegExp(pattern, flags);
-    }   catch (error) {
-        return null;
+        return new RegExp(pattern, isCaseSensitive ? '' : 'i');
+    } catch (err) {
+        return null; 
     }
 }
 
 export function searchTransactions(transactions, regex) {
-    if (!regex) return transactions;
-    return transactions.filter(t => {
-        regex.test(t.description)
-        regex.test(t.category)
-        regex.test(t.date)
-    });
+    if (!regex) return transactions; 
+    return transactions.filter(t =>
+        regex.test(t.description) ||
+        regex.test(t.category) ||
+        regex.test(String(t.amount))
+    );
 }
 
 export function highlightMatch(text, regex) {

@@ -106,4 +106,3 @@ function getBudget() {
     return budget;
 }
 
-console.log("Budget is:", getBudget());

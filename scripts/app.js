@@ -32,9 +32,79 @@ document.addEventListener('DOMContentLoaded', function() {
         const sortValue = this.value;
         sortTransactions(sortValue);
         renderTransactions();
-    });
 
-    // Search handlers (same level as sort!)
+
+// export button
+const exportBtn =document.getElementById ('exportBtn');
+exportBtn.addEventListener('click', handleExport);
+ // Import button 
+ const importFile = document.getElementById('import-file') 
+ importFile.addEventListener('change', handleImport);   
+
+function handleExport() {
+    const transactions = getTransactions();
+    const jsonString = JSON.stringify(transactions, null, 2);
+    const blob = new Blob([jsonString], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    link.href = url;
+    link.download = 'transactions.json';
+
+    link.click();
+    URL.revokeObjectURL(url);
+
+function handleImport(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const data = JSON.parse(e.target.result);
+            if (Array.isArray(data)) {
+                showImportError('Invalid file format');
+                return;
+            }
+            for (let t of data) {
+                if (!t.id || !t.description || !t.amount || !t.category || !t.date) {
+                    showImportError('Invalid transaction data');
+                    return;
+                }
+            }
+        // saveto local storage
+
+        // re-render
+        renderTransactions();
+        updateDashboard();
+        }
+
+        showImportSuccess('Imported ${data.length} transactions successfully');
+
+    }catch (error) {
+        showImportError('Error reading file');
+    }
+    reader.readAsText(file);
+}
+function showImportError(message) {
+    const importErrorEl = document.getElementById('import-error');
+    importErrorEl.textContent = message;
+    importErrorEl.style.display = 'block';
+    importErrorEl.style.color = 'red';
+}
+function showImportSuccess(message) {
+    const statusEl = document.getElementById('import-status');
+    statusEl.textContent = message;
+    statusEl.style.display = 'block';
+    statusEl.style.color = 'green';
+
+    setTimeout(() => {
+        statusEl.style.display = '';
+    }, 3000);
+}
+});
+
+
+    // Search handlers 
     const searchBtn = document.getElementById('search-btn');
     searchBtn.addEventListener('click', handleSearch);
 
@@ -52,28 +122,42 @@ document.addEventListener('DOMContentLoaded', function() {
 // Functions OUTSIDE DOMContentLoaded
 
 function handleSearch() {
-    const pattern = document.getElementById('search-input').value;
+    const pattern = document.getElementById('search-input').value.trim();
     const isCaseSensitive = document.getElementById('case-sensitive').checked;
-    
-    const regex = compileRegex(pattern, isCaseSensitive);
-    
-    if (pattern && !regex) {
-        document.getElementById('search-error').textContent = 'Invalid regex pattern';
+    const errorEl = document.getElementById('search-error');
+
+    // If input is empty → show all transactions
+    if (!pattern) {
+        errorEl.textContent = '';
+        renderTransactions();
         return;
     }
-    
-    document.getElementById('search-error').textContent = '';
-    
+
+    const regex = compileRegex(pattern, isCaseSensitive);
+
+    // If regex is invalid
+    if (!regex && pattern) {
+        errorEl.textContent = 'Invalid regex pattern';
+        return;
+    }
+
+    // If regex is valid
+    errorEl.textContent = '';
+
     const allTransactions = getTransactions();
     const filtered = searchTransactions(allTransactions, regex);
-    
     renderFilteredResults(filtered, regex);
 }
 
 function handleClearSearch() {
     document.getElementById('search-input').value = '';
     document.getElementById('case-sensitive').checked = false;
-    document.getElementById('search-error').textContent = '';
+    const searchErrorEl = document.getElementById('search-error');
+    if (searchErrorEl) {
+    searchErrorEl.textContent = '';
+    searchErrorEl.style.display = 'none';
+}
+
     renderTransactions();  // Show all again
 }
 
