@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Expense Tracker</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Dark Mode Toggle -->
+    <button id="dark-mode-toggle" class="toggle-btn">Toggle Dark Mode</button>
+
+    <header class="about-header">
+        <h1>About Expense Tracker</h1>
+    </header>
+
+    <main class="about-main">
+        <section class="card">
+            <h2>Our Mission</h2>
+            <p>
+                Expense Tracker is designed to help you manage your finances effortlessly.
+                Track your spending, categorize transactions, and monitor your budget in a modern, intuitive interface.
+            </p>
+        </section>
+
+        <section class="card">
+            <h2>Features</h2>
+            <ul>
+                <li>Track transactions with categories and dates</li>
+                <li>Dynamic dashboard with totals and insights</li>
+                <li>Search and filter transactions easily</li>
+                <li>Budget monitoring with alerts</li>
+                <li>Dark and Light mode toggle for comfortable viewing</li>
+                <li>Mobile-friendly and responsive design</li>
+            </ul>
+        </section>
+
+        <section class="card">
+            <h2>Technologies</h2>
+            <p>
+                Built using HTML, CSS, and JavaScript, with modern features like Chart.js for dynamic graphs, localStorage for persistence, and modular code structure.
+            </p>
+        </section>
+
+        <section class="card">
+            <h2>Contact</h2>
+            <p>
+                For suggestions or feedback, reach out via email: <a href="mailto:support@expensetracker.com">support@expensetracker.com</a>
+            </p>
+        </section>
+    </main>
+
+    <footer class="about-footer">
+        <p>&copy; 2025 Expense Tracker. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Dark mode toggle
+        const toggleBtn = document.getElementById('dark-mode-toggle');
+        toggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        });
+
+        // Load saved theme
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+            }
+        });
+    </script>
+</body>
+</html>

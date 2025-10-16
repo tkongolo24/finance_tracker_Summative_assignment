@@ -68,6 +68,13 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.classList.toggle('dark-mode');
     });
 
+    // Responsive Navigation
+    const burgerBtn = document.getElementById('burger-btn');
+    const nav = document.querySelector('header nav');
+    burgerBtn.addEventListener('click', () => {
+    nav.classList.toggle('active');
+    });
+
     // Top Category Graph
 const topCategoryCtx = document.getElementById('top-category-graph').getContext('2d');
 let topCategoryChart = new Chart(topCategoryCtx, {
