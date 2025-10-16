@@ -44,7 +44,7 @@
         <div class="stat-card">
             <h3>Top Category</h3>  
             <p id="top-category">None</p>  
-        
+        </div>
         <!-- Stat Card 4: Last 7 Days -->
         <div class="stat-card">
             <h3>Last 7 Days</h3>  
@@ -62,6 +62,10 @@
     </div>
 </section>
 
+<input id="search-input">
+<button id="search-btn">
+<button id="clear-search-btn">
+    
 <!-- Transaction History Section -->
 <section id="transaction-history">  
     <h2>Transaction History</h2>  
@@ -91,7 +95,7 @@
         <label for="description">Description</label>
         <input type="text" id="description" required>
         <span class="error-message" id="description-error" aria-live="polite"></span>
-        <p id="description-error" class="error-message"></p>
+        
         <!-- Amount input -->
         <label for="amount">Amount</label>
         <input type="number" id="amount" required step="0.01" min="0">
