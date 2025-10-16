@@ -8,14 +8,6 @@ import {
 } from './state.js';
 
 import { 
-    renderTransactions, 
-    updateDashboard, 
-    clearForm, 
-    showError, 
-    clearError 
-} from './ui.js';
-
-import { 
     validateDescription, 
     validateAmount, 
     validateDate, 
@@ -30,10 +22,13 @@ import {
 
 import { saveTransactions } from './storage.js';
 
+import { setFormToEditMode, setupCancelButton, setupBudgetPersistence } from './ui.js';
+
+
 let currentFilteredTransactions = null; 
 let currentEditId = null;
 
-// ✅ Used for editing
+// Populate form for editing
 function populateFormForEdit(id) {
     const transactions = getTransactions();
     const t = transactions.find(tx => tx.id === id);
@@ -50,15 +45,24 @@ function populateFormForEdit(id) {
     if (submitBtn) submitBtn.textContent = 'Update Transaction';
 }
 
-// ✅ Initialize everything
+// Initialize everything
 document.addEventListener('DOMContentLoaded', function() {
+
+    // Load saved budget
+    const savedBudget = localStorage.getItem('budget');
+    if (savedBudget) {
+        document.getElementById('budget-cap').value = savedBudget;
+    }
+
     initState();
     renderTransactions();
     updateDashboard();
+    setupCancelButton({current: currentEdited});
+    setupBudgetPersistence();
 
     const container = document.getElementById('transaction-container');
 
-    // ✅ Edit button handler
+    // Edit button handler
     container.addEventListener('click', function(event) {
         if (event.target.classList.contains('btn-edit')) {
             const id = event.target.getAttribute('data-id');
@@ -66,41 +70,54 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // ✅ Delete button handler
+    // Delete button handler
     container.addEventListener('click', handleDelete);
 
-    // ✅ Form submit
+    // Form submit handler
     document.getElementById('Add-form').addEventListener('submit', handleFormSubmit);
 
-    // ✅ Budget update
-    const budgetInput = document.getElementById('budget-cap');
-    budgetInput.addEventListener('input', updateDashboard);
+    // Cancel editing
+    const cancelBtn = document.getElementById('cancel-btn');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+            clearForm();
+            currentEditId = null;
+            document.getElementById('submit-btn').textContent = 'Add Transaction';
+        });
+    }
 
-    // ✅ Clear errors while typing
+    // Budget input: save and update
+    const budgetInput = document.getElementById('budget-cap');
+    budgetInput.addEventListener('input', (e) => {
+        localStorage.setItem('budget', e.target.value);
+        updateDashboard();
+    });
+
+    // Clear errors while typing
     document.getElementById('description').addEventListener('input', () => clearError('description'));
     document.getElementById('amount').addEventListener('input', () => clearError('amount'));
     document.getElementById('category').addEventListener('input', () => clearError('category'));
     document.getElementById('date').addEventListener('input', () => clearError('date'));
 
-    // ✅ Sort
+    // Sort transactions
     const sortSelect = document.getElementById('sort-by');
     sortSelect.addEventListener('change', function() {
         const sortValue = this.value;
         sortTransactions(sortValue);
-        renderTransactions();
+        renderTransactions(currentEditId);
     });
 
-    // ✅ Export
+    // Export
     const exportBtn = document.getElementById('export-btn');
     exportBtn.addEventListener('click', () => {
         handleExport(currentFilteredTransactions || getTransactions());
     });
 
-    // ✅ Import
+    // Import
     const importFile = document.getElementById('import-file');
     importFile.addEventListener('change', handleImport);
 
-    // ✅ Search
+    // Search
     const searchBtn = document.getElementById('search-btn');
     searchBtn.addEventListener('click', handleSearch);
 
@@ -113,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// ✅ Form Submit Handler
+// Handle form submission (add/update)
 function handleFormSubmit(event) {
     event.preventDefault();
 
@@ -142,7 +159,7 @@ function handleFormSubmit(event) {
     if (!validateCategory(category)) return showError('category', 'Invalid category');
     if (!validateDate(date)) return showError('date', 'Invalid date');
 
-    // ✅ Edit existing transaction
+    // Edit existing transaction
     if (currentEditId) {
         const index = transactions.findIndex(t => t.id === currentEditId);
         if (index !== -1) {
@@ -165,7 +182,7 @@ function handleFormSubmit(event) {
         return;
     }
 
-    // ✅ Add new transaction
+    // Add new transaction
     const transaction = {
         id: generateId(),
         description,
@@ -182,7 +199,7 @@ function handleFormSubmit(event) {
     clearForm();
 }
 
-// ✅ Delete
+// Delete transaction
 function handleDelete(event) {
     if (event.target.classList.contains('btn-delete')) {
         const id = event.target.getAttribute('data-id');
@@ -192,7 +209,7 @@ function handleDelete(event) {
     }
 }
 
-// ✅ Export
+// Export
 function handleExport() {
     const transactions = getTransactions();
     const jsonString = JSON.stringify(transactions, null, 2);
@@ -206,7 +223,7 @@ function handleExport() {
     URL.revokeObjectURL(url);
 } 
 
-// ✅ Import (fixed merging logic)
+// Import with merging
 function handleImport(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -249,7 +266,7 @@ function handleImport(event) {
     reader.readAsText(file);
 }
 
-// ✅ Import feedback
+// Import feedback
 function showImportError(message) {
     const statusEl = document.getElementById('import-status');
     if (statusEl) {
@@ -272,7 +289,7 @@ function showImportSuccess(message) {
     }
 }
 
-// ✅ Search
+// Search
 function handleSearch() {
     const pattern = document.getElementById('search-input').value.trim();
     const isCaseSensitive = document.getElementById('case-sensitive').checked;

@@ -56,3 +56,10 @@ section h2 {
     display: none;
     margin-top: 5px;
 }
+.transaction-item.editing {
+    border: 2px solid #007bff;
+    background-color: #e6f0ff;
+    padding: 8px;
+    border-radius: 4px;
+}
+
