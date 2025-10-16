@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Finance Tracker</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 
@@ -59,12 +60,14 @@
         
         <!-- Stat Card 3: Top Category -->
         <div class="stat-card">
-            <h3>Top Category</h3>  
+            <h3>Top Category</h3>
+            <canvas id="top-category-graph" class="graph-container"></canvas>  
             <p id="top-category">None</p>  
         </div>
         <!-- Stat Card 4: Last 7 Days -->
         <div class="stat-card">
-            <h3>Last 7 Days</h3>  
+            <h3>Last 7 Days</h3> 
+            <canvas id="last-7-days-graph" class="graph-container"></canvas> 
             <p id="last-7-days">$0.00</p>  
         </div>
         
@@ -148,6 +151,7 @@
         <!-- Submit button -->
         <button type="submit">Save</button>
         
+        <button id="dark-mode-toggle">Toggle Dark Mode</button>
     </form>
 </section>  
 </main>

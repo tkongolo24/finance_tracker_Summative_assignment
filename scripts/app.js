@@ -62,6 +62,58 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const container = document.getElementById('transaction-container');
 
+    // Dark/Light Mode Toggle
+    const darkModeToggle = document.getElementById('dark-mode-toggle');
+    darkModeToggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+    });
+
+    // Top Category Graph
+const topCategoryCtx = document.getElementById('top-category-graph').getContext('2d');
+let topCategoryChart = new Chart(topCategoryCtx, {
+    type: 'bar',
+    data: { labels: [], datasets: [{ label: 'Amount', data: [], backgroundColor: '#2e7d32' }] },
+    options: { responsive: true, plugins: { legend: { display: false } } }
+});
+
+// Last 7 Days Graph
+const last7DaysCtx = document.getElementById('last-7-days-graph').getContext('2d');
+let last7DaysChart = new Chart(last7DaysCtx, {
+    type: 'line',
+    data: { labels: [], datasets: [{ label: 'Spent', data: [], borderColor: '#2e7d32', backgroundColor: 'rgba(46,125,50,0.2)', fill: true }] },
+    options: { responsive: true }
+});
+
+// Function to update graphs
+function updateGraphs() {
+    const transactions = getTransactions();
+
+    // Top Category
+    let categoryTotals = {};
+    transactions.forEach(t => { categoryTotals[t.category] = (categoryTotals[t.category] || 0) + t.amount; });
+    topCategoryChart.data.labels = Object.keys(categoryTotals);
+    topCategoryChart.data.datasets[0].data = Object.values(categoryTotals);
+    topCategoryChart.update();
+
+    // Last 7 Days
+    const today = new Date();
+    let last7DaysLabels = [];
+    let last7DaysData = [];
+    for (let i = 6; i >= 0; i--) {
+        const day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
+        const dayStr = day.toISOString().split('T')[0];
+        last7DaysLabels.push(dayStr);
+        const daySpent = transactions.filter(t => t.date === dayStr).reduce((sum, t) => sum + t.amount, 0);
+        last7DaysData.push(daySpent);
+    }
+    last7DaysChart.data.labels = last7DaysLabels;
+    last7DaysChart.data.datasets[0].data = last7DaysData;
+    last7DaysChart.update();
+}
+
+// Call this inside your existing updateDashboard() after stats update
+updateGraphs();
+
     // Edit button handler
     container.addEventListener('click', function(event) {
         if (event.target.classList.contains('btn-edit')) {
