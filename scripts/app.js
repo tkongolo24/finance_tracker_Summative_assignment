@@ -33,7 +33,7 @@ import { saveTransactions } from './storage.js';
 let currentFilteredTransactions = null; 
 let currentEditId = null;
 
-// Populate Form for Edit
+// ✅ Used for editing
 function populateFormForEdit(id) {
     const transactions = getTransactions();
     const t = transactions.find(tx => tx.id === id);
@@ -44,32 +44,45 @@ function populateFormForEdit(id) {
     document.getElementById('category').value = t.category;
     document.getElementById('date').value = t.date;
 
-    const submitBtn = document.querySelector('#Add-form button[type="submit"]');
-    if (submitBtn) submitBtn.textContent = 'Update Transaction';
-
     currentEditId = id;
+
+    const submitBtn = document.getElementById('submit-btn');
+    if (submitBtn) submitBtn.textContent = 'Update Transaction';
 }
 
-// DOMContentLoaded
+// ✅ Initialize everything
 document.addEventListener('DOMContentLoaded', function() {
     initState();
     renderTransactions();
     updateDashboard();
 
     const container = document.getElementById('transaction-container');
+
+    // ✅ Edit button handler
+    container.addEventListener('click', function(event) {
+        if (event.target.classList.contains('btn-edit')) {
+            const id = event.target.getAttribute('data-id');
+            populateFormForEdit(id);
+        }
+    });
+
+    // ✅ Delete button handler
     container.addEventListener('click', handleDelete);
 
-    // Budget handler
+    // ✅ Form submit
+    document.getElementById('Add-form').addEventListener('submit', handleFormSubmit);
+
+    // ✅ Budget update
     const budgetInput = document.getElementById('budget-cap');
     budgetInput.addEventListener('input', updateDashboard);
 
-    // Error clearing
+    // ✅ Clear errors while typing
     document.getElementById('description').addEventListener('input', () => clearError('description'));
     document.getElementById('amount').addEventListener('input', () => clearError('amount'));
     document.getElementById('category').addEventListener('input', () => clearError('category'));
     document.getElementById('date').addEventListener('input', () => clearError('date'));
 
-    // Sort handler
+    // ✅ Sort
     const sortSelect = document.getElementById('sort-by');
     sortSelect.addEventListener('change', function() {
         const sortValue = this.value;
@@ -77,17 +90,17 @@ document.addEventListener('DOMContentLoaded', function() {
         renderTransactions();
     });
 
-    // Export handler
+    // ✅ Export
     const exportBtn = document.getElementById('export-btn');
     exportBtn.addEventListener('click', () => {
         handleExport(currentFilteredTransactions || getTransactions());
     });
 
-    // Import handler
+    // ✅ Import
     const importFile = document.getElementById('import-file');
     importFile.addEventListener('change', handleImport);
 
-    // Search handlers
+    // ✅ Search
     const searchBtn = document.getElementById('search-btn');
     searchBtn.addEventListener('click', handleSearch);
 
@@ -96,17 +109,90 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const searchInput = document.getElementById('search-input');
     searchInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            handleSearch();
-        }
+        if (e.key === 'Enter') handleSearch();
     });
-
-    // Form submit
-    const form = document.getElementById('Add-form');
-    form.addEventListener('submit', handleFormSubmit);
 });
 
-// Handle Export
+// ✅ Form Submit Handler
+function handleFormSubmit(event) {
+    event.preventDefault();
+
+    const description = document.getElementById('description').value;
+    const amount = document.getElementById('amount').value;
+    let category = document.getElementById('category').value;
+    const date = document.getElementById('date').value;
+    const budget = parseFloat(document.getElementById('budget-cap').value);
+    const transactions = getTransactions();
+
+    let totalSpent = transactions.reduce((sum, t) => sum + t.amount, 0);
+
+    // Prevent overspending
+    if (!currentEditId && totalSpent + parseFloat(amount) > budget) {
+        showError('amount', 'Adding this transaction exceeds your budget');
+        return;
+    }
+
+    // Normalize category
+    category = category.trim();
+    category = category[0].toUpperCase() + category.slice(1).toLowerCase();
+
+    // Validation
+    if (!validateDescription(description)) return showError('description', 'Invalid description');
+    if (!validateAmount(amount)) return showError('amount', 'Invalid amount');
+    if (!validateCategory(category)) return showError('category', 'Invalid category');
+    if (!validateDate(date)) return showError('date', 'Invalid date');
+
+    // ✅ Edit existing transaction
+    if (currentEditId) {
+        const index = transactions.findIndex(t => t.id === currentEditId);
+        if (index !== -1) {
+            transactions[index] = {
+                ...transactions[index],
+                description,
+                amount: parseFloat(amount),
+                category,
+                date,
+                updatedAt: new Date().toISOString()
+            };
+            saveTransactions(transactions);
+            renderTransactions();
+            updateDashboard();
+            clearForm();
+            currentEditId = null;
+            document.getElementById('submit-btn').textContent = 'Add Transaction';
+            alert('Transaction updated successfully!');
+        }
+        return;
+    }
+
+    // ✅ Add new transaction
+    const transaction = {
+        id: generateId(),
+        description,
+        amount: parseFloat(amount),
+        category,
+        date,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+    };
+
+    addTransaction(transaction);
+    renderTransactions();
+    updateDashboard();
+    clearForm();
+}
+
+// ✅ Delete
+function handleDelete(event) {
+    if (event.target.classList.contains('btn-delete')) {
+        const id = event.target.getAttribute('data-id');
+        deleteTransaction(id);
+        renderTransactions();
+        updateDashboard();
+    }
+}
+
+// ✅ Export
 function handleExport() {
     const transactions = getTransactions();
     const jsonString = JSON.stringify(transactions, null, 2);
@@ -118,9 +204,9 @@ function handleExport() {
     link.download = 'transactions.json';
     link.click();
     URL.revokeObjectURL(url);
-}
+} 
 
-// Handle Import
+// ✅ Import (fixed merging logic)
 function handleImport(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -155,7 +241,6 @@ function handleImport(event) {
             initState();
             renderTransactions();
             updateDashboard();
-
             showImportSuccess(`Imported ${data.length} transactions successfully`);
         } catch (error) {
             showImportError('Error reading file');
@@ -164,7 +249,7 @@ function handleImport(event) {
     reader.readAsText(file);
 }
 
-// Show Import Messages
+// ✅ Import feedback
 function showImportError(message) {
     const statusEl = document.getElementById('import-status');
     if (statusEl) {
@@ -180,7 +265,6 @@ function showImportSuccess(message) {
         statusEl.textContent = message;
         statusEl.style.color = 'green';
         statusEl.style.display = 'block';
-
         setTimeout(() => {
             statusEl.textContent = '';
             statusEl.style.display = 'none';
@@ -188,7 +272,7 @@ function showImportSuccess(message) {
     }
 }
 
-// Search Logic
+// ✅ Search
 function handleSearch() {
     const pattern = document.getElementById('search-input').value.trim();
     const isCaseSensitive = document.getElementById('case-sensitive').checked;
@@ -201,7 +285,6 @@ function handleSearch() {
     }
 
     const regex = compileRegex(pattern, isCaseSensitive);
-
     if (!regex && pattern) {
         errorEl.textContent = 'Invalid regex pattern';
         return;
@@ -213,7 +296,6 @@ function handleSearch() {
     renderFilteredResults(filtered, regex);
 }
 
-// Clear Search
 function handleClearSearch() {
     document.getElementById('search-input').value = '';
     document.getElementById('case-sensitive').checked = false;
@@ -228,7 +310,6 @@ function handleClearSearch() {
     renderTransactions(); 
 }
 
-// Render Filtered Results
 function renderFilteredResults(transactions, regex) {
     const container = document.getElementById('transaction-container');
     currentFilteredTransactions = transactions; 
@@ -255,97 +336,4 @@ function renderFilteredResults(transactions, regex) {
             </div>`;
     }
     container.innerHTML = html;
-}
-
-// Handle Form Submission
-function handleFormSubmit(event) {
-    event.preventDefault();
-
-    const description = document.getElementById('description').value;
-    const amount = document.getElementById('amount').value;
-    let category = document.getElementById('category').value;
-    const date = document.getElementById('date').value;
-    const budget = parseFloat(document.getElementById('budget-cap').value);
-
-    const transactions = getTransactions();
-    let totalSpent = transactions.reduce((sum, t) => sum + t.amount, 0);
-
-    if (totalSpent + parseFloat(amount) > budget && !currentEditId) {
-        showError('amount', 'Adding this transaction exceeds your budget');
-        return;
-    }
-
-    category = category.trim();
-    category = category[0].toUpperCase() + category.slice(1).toLowerCase();
-
-    if (!validateDescription(description)) {
-        showError('description', 'Invalid description');
-        return;
-    }
-    if (!validateAmount(amount)) {
-        showError('amount', 'Invalid amount');
-        return;
-    }
-    if (!validateCategory(category)) {
-        showError('category', 'Invalid category');
-        return;
-    }
-    if (!validateDate(date)) {
-        showError('date', 'Invalid date');
-        return;
-    }
-
-    if (currentEditId) {
-        const index = transactions.findIndex(t => t.id === currentEditId);
-        if (index !== -1) {
-            transactions[index] = {
-                ...transactions[index],
-                description,
-                amount: parseFloat(amount),
-                category,
-                date,
-                updatedAt: new Date().toISOString()
-            };
-            saveTransactions(transactions);
-            renderTransactions();
-            updateDashboard();
-            clearForm();
-            currentEditId = null;
-
-            const submitBtn = document.querySelector('#Add-form button[type="submit"]');
-            if (submitBtn) submitBtn.textContent = 'Add Transaction';
-
-            alert('Transaction updated successfully!');
-        }
-    } else {
-        const transaction = {
-            id: generateId(),
-            description,
-            amount: parseFloat(amount),
-            category,
-            date,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-        };
-
-        addTransaction(transaction);
-        renderTransactions();
-        updateDashboard();
-        clearForm();
-    }
-}
-
-
-// Handle Delete
-function handleDelete(event) {
-    if (event.target.classList.contains('btn-delete')) {
-        const id = event.target.getAttribute('data-id');
-        deleteTransaction(id);
-        renderTransactions();
-        updateDashboard();
-    }
-    if (event.target.classList.contains('btn-edit')) {
-        const id = event.target.getAttribute('data-id');
-        populateFormForEdit(id);
-    }
 }
