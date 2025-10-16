@@ -54,7 +54,7 @@ function populateFormForEdit(id) {
   if (submitBtn) submitBtn.textContent = 'Update Transaction';
 }
 
-// ✅ Initialize
+// Initialize
 document.addEventListener('DOMContentLoaded', () => {
   // Budget persistence
   const savedBudget = localStorage.getItem('budget');
