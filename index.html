@@ -7,53 +7,26 @@
     <link rel="stylesheet" href="styles/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
-s
-<script>
-  const burgerMenu = document.querySelector('.burger-menu');
-  const nav = document.querySelector('header nav');
-
-  burgerMenu.addEventListener('click', () => {
-    nav.classList.toggle('active');
-  });
-</script>
 
 <body>
 <header>
-    <h1>Student Finance Tracker</h1>
-    <button class="burger-menu" aria-label="Toggle navigation">
-    ☰
-  </button>
-    <nav>
-        <ul>
-            <li><a href="#dashboard">Dashboard</a></li>
-            <li><a href="#transaction-history">Transactions</a></li>
-            <li><a href="#transaction-form">Add New</a></li>
-            <li><a href="about.html">About</a></li>
-        </ul>
-    </nav>
+  <h1>Student Finance Tracker</h1>
+  <button class="burger-menu" id="burger-btn">☰</button>
+  <nav>
+    <ul>
+      <li><a href="index.html#dashboard">Dashboard</a></li>
+      <li><a href="index.html#transaction-history">Transactions</a></li>
+      <li><a href="index.html#transaction-form">Add New</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </nav>
 </header>
-<button class="burger-menu" id="burger-btn">☰</button>
+
 <main id="main-content">
     <!-- Dashboard Section -->
 <section id="dashboard">
     <h2>Dashboard</h2>
 
-    <section id="settings">
-    <h2>Settings</h2>
-    
-    <div class="data-management">
-        <h3>Data Management</h3>
-        
-        <button id="export-btn">Export Data (JSON)</button>
-        
-        <div class="import-section">
-            <label for="import-file">Import Data:</label>
-            <input type="file" id="import-file" accept=".json">
-        </div>
-        
-        <p id="import-status" role="status" aria-live="polite"></p>
-    </div>
-</section>
     
     <!-- Stats Grid - 4 stat cards -->
     <div class="stats-grid">
@@ -164,10 +137,35 @@ s
         <button type="submit">Save</button>
         
         <button id="dark-mode-toggle">Toggle Dark Mode</button>
+    <section id="settings">
+    <h2>Settings</h2>
+    
+    <div class="data-management">
+        <h3>Data Management</h3>
+        
+        <button id="export-btn">Export Data (JSON)</button>
+        
+        <div class="import-section">
+            <label for="import-file">Import Data:</label>
+            <input type="file" id="import-file" accept=".json">
+        </div>
+        
+        <p id="import-status" role="status" aria-live="polite"></p>
+    </div>
+</section>
     </form>
 </section>  
 </main>
 <script type="module" src="scripts/app.js"></script>
+<script>
+const burgerBtn = document.getElementById("burger-btn");
+const nav = document.querySelector("nav");
+
+burgerBtn?.addEventListener("click", () => {
+  nav.classList.toggle("active");
+});
+</script>
+
 </body>
 </html>
 

@@ -3,55 +3,60 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About - Student Finance Tracker</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script defer src="scripts/app.js"></script>
+  <title>About | Student Finance Tracker</title>
+  <link rel="stylesheet" href="styles/styles.css">
 </head>
 
 <body>
-  <header class="header">
-    <div class="logo">💸 Finance Tracker</div>
-    
-    <!-- Burger button for mobile -->
-    <button id="burger-btn" class="burger-btn" aria-label="Menu">
-      ☰
-    </button>
+  <header>
+  <h1>Student Finance Tracker</h1>
+  <button class="burger-menu" id="burger-btn">☰</button>
+  <nav>
+    <ul>
+      <li><a href="index.html#dashboard">Dashboard</a></li>
+      <li><a href="index.html#transaction-history">Transactions</a></li>
+      <li><a href="index.html#transaction-form">Add New</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+  </nav>
+</header>
 
-    <nav>
-      <ul>
-        <li><a href="index.html#dashboard">Dashboard</a></li>
-        <li><a href="index.html#transaction-history">Transactions</a></li>
-        <li><a href="index.html#transaction-form">Add Transaction</a></li>
-        <li><a href="about.html" class="active">About</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <main class="about-section">
-    <section>
-      <h2>Our Mission</h2>
+  <main class="about-page">
+    <section class="about-hero">
+      <h2>About Student Finance Tracker</h2>
       <p>
-        The <strong>Student Finance Tracker</strong> helps students manage spending, 
-        visualize expenses, and build better budgeting habits.
+        The <strong>Student Finance Tracker</strong> is designed to help students take control of their personal
+        finances. It allows you to track your expenses, set monthly budgets, visualize spending patterns,
+        and make smarter financial decisions — all in one intuitive dashboard.
       </p>
     </section>
 
-    <section>
-      <h2>Features</h2>
+    <section class="mission-section">
+      <h3>Our Mission</h3>
+      <p>
+        To empower students to manage money confidently and build healthy financial habits through a
+        simple, accessible, and powerful tool.
+      </p>
+    </section>
+
+    <section class="features-section">
+      <h3>Key Features</h3>
       <ul>
-        <li>Track and edit transactions</li>
-        <li>Visual insights with live charts</li>
-        <li>Search, sort, and export transactions</li>
-        <li>Dark mode and responsive design</li>
+        <li>💰 Track and categorize transactions</li>
+        <li>📊 Visual spending analytics and charts</li>
+        <li>🎯 Set and monitor your monthly budget</li>
+        <li>☁️ Save and load your data locally</li>
+        <li>🌗 Light / Dark mode toggle</li>
       </ul>
     </section>
 
-    <section>
-      <h2>Credits</h2>
-      <p>
-        Developed by <strong>Tumba</strong> as part of a web development project.
-        The goal: make financial management simple and accessible for students.
-      </p>
+    <section class="author-section">
+      <h3>Developed By</h3>
+      <p><strong>Tumba</strong> — Software Engineering Student at ALU, passionate about tech, design, and AI innovation.</p>
+    </section>
+
+    <section class="back-link">
+      <a href="index.html" class="btn">← Back to Dashboard</a>
     </section>
   </main>
 
@@ -59,15 +64,17 @@
     <p>© 2025 Student Finance Tracker. All rights reserved.</p>
   </footer>
 
+  <script src="scripts/" defer></script>
   <script>
-    // Add burger button toggle for mobile nav
-    document.addEventListener('DOMContentLoaded', () => {
-      const burger = document.getElementById('burger-btn');
-      const nav = document.querySelector('header nav');
-      burger.addEventListener('click', () => {
-        nav.classList.toggle('active');
-      });
+    // Burger menu toggle
+    const burgerBtn = document.getElementById("burger-btn");
+    const nav = document.querySelector("nav");
+
+    burgerBtn?.addEventListener("click", () => {
+      nav.classList.toggle("active");
     });
   </script>
+
+
 </body>
 </html>

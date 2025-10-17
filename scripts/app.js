@@ -1,4 +1,3 @@
-// ✅ Import dependencies correctly
 import {
   initState,
   addTransaction,
@@ -34,11 +33,11 @@ import {
   setupBudgetPersistence
 } from './ui.js';
 
-// ✅ Globals
+// Globals
 let currentFilteredTransactions = null;
 let currentEditId = null;
 
-// ✅ Populate form for edit
+// Populate form for edit
 function populateFormForEdit(id) {
   const transactions = getTransactions();
   const t = transactions.find(tx => tx.id === id);
@@ -78,14 +77,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // 🍔 Burger Menu
-  const burgerBtn = document.getElementById('burger-btn');
-  const nav = document.querySelector('header nav');
+  // ===== BURGER MENU TOGGLE =====
+document.addEventListener("DOMContentLoaded", () => {
+  const burgerBtn = document.getElementById("burger-btn");
+  const nav = document.querySelector("header nav");
+
   if (burgerBtn && nav) {
-    burgerBtn.addEventListener('click', () => {
-      nav.classList.toggle('active');
+    burgerBtn.addEventListener("click", () => {
+      nav.classList.toggle("active");
+    });
+
+    // Close menu when clicking a link (for mobile)
+    const links = nav.querySelectorAll("a");
+    links.forEach(link => {
+      link.addEventListener("click", () => {
+        nav.classList.remove("active");
+      });
     });
   }
+});
+
 
   // 📊 Charts (Chart.js)
   const topCategoryCtx = document.getElementById('top-category-graph')?.getContext('2d');

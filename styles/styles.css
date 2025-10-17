@@ -1,24 +1,20 @@
 /* ========================================
-   CSS VARIABLES - Change these to customize your theme!
+   CSS VARIABLES
    ======================================== */
 :root {
-    /* Main colors - Feel free to adjust! */
-    --teal: grey;              /* Your accent color */
-    --teal-dark: black;         /* Darker teal for hovers */
-    --dark-gray: #35424a;         /* Header background */
-    --light-gray: #f5f5f5;        /* Page background */
-    --white: #ffffff;             /* Card backgrounds */
-    --text-dark: #333333;         /* Main text */
-    --text-light: #666666;        /* Secondary text */
-    --error-red: red;         /* Error messages */
-    --success-green: #ffffff;     /* Success messages */
-    
-    /* Shadows for depth */
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-    --shadow-md: 0 8px 8px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-    
-    /* Spacing - Adjust for more/less space */
+    --teal: #20c997;          /* Accent color */
+    --teal-dark: #157a6e;     /* Hover/darker accent */
+    --dark-gray: #35424a;     /* Header background */
+    --light-gray: #f5f5f5;    /* Page background */
+    --white: #ffffff;          /* Card backgrounds */
+    --text-dark: #333333;     /* Main text */
+    --text-light: #666666;    /* Secondary text */
+    --error-red: #dc2626;     /* Error messages */
+
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+    --shadow-md: 0 8px 8px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+
     --spacing-xs: 8px;
     --spacing-sm: 12px;
     --spacing-md: 20px;
@@ -27,13 +23,12 @@
 }
 
 /* ========================================
-   RESET & BASE STYLES
-   Remove browser defaults for consistency
+   RESET & BASE
    ======================================== */
 * {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;  /* Makes width/height calculations easier */
+    box-sizing: border-box;
 }
 
 body {
@@ -41,76 +36,78 @@ body {
     background-color: var(--light-gray);
     color: var(--text-dark);
     line-height: 1.6;
-    min-height: 100vh;  /* Full viewport height */
+    min-height: 100vh;
 }
 
 /* ========================================
    HEADER & NAVIGATION
-   Top bar with title and menu
    ======================================== */
 header {
-    background-color: var(--dark-gray);
+    background-color: var(--teal-dark);
     color: var(--white);
     padding: var(--spacing-md) var(--spacing-lg);
-    box-shadow: var(--shadow-md);
-    position: sticky;  /* Stays at top when scrolling */
+    position: sticky;
     top: 0;
-    z-index: 100;  /* Stays above other content */
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 header h1 {
     font-size: 1.8rem;
-    margin-bottom: var(--spacing-sm);
 }
 
-/* Navigation menu styling */
-header nav ul {
-    list-style: none;
+header nav {
     display: flex;
-    gap: var(--spacing-md);  /* Space between menu items */
-    flex-wrap: wrap;  /* Wraps on small screens */
+    gap: var(--spacing-md);
 }
 
-header nav ul li {
-    display: inline;
+header nav ul {
+    display: flex;
+    list-style: none;
+    gap: var(--spacing-md);
 }
 
 header nav a {
-    color: var(--dark-gray);
+    color: var(--white);
     text-decoration: none;
-    padding: var(--spacing-xs 4px) var(--spacing-sm);
+    padding: var(--spacing-xs) var(--spacing-sm);
     border-radius: 4px;
-    transition: background-color 0.3s ease;  /* Smooth hover effect */
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 header nav a:hover {
-    background-color: var(--teal);  /* Teal highlight on hover */
+    background-color: var(--teal-dark);
+    color: var(--white);
 }
 
-header nav a:focus {
-    outline: 2px solid var(--teal);  /* Accessibility: visible focus */
-    outline-offset: 2px;
+/* Burger menu button */
+.burger-menu {
+    display: none;
+    font-size: 1.8rem;
+    background: none;
+    border: none;
+    color: var(--white);
+    cursor: pointer;
+    z-index: 110;
 }
 
 /* ========================================
-   MAIN CONTENT CONTAINER
-   Centers content and limits max width
+   MAIN CONTENT
    ======================================== */
 main {
-    max-width: 1200px;  /* Don't stretch too wide on big screens */
-    margin: var(--spacing-lg) auto;  /* Center horizontally */
-    padding: 0 var(--spacing-md);  /* Space on sides */
+    max-width: 1200px;
+    margin: var(--spacing-lg) auto;
+    padding: 0 var(--spacing-md);
 }
 
-/* ========================================
-   SECTIONS
-   Each major section (Dashboard, Form, etc.)
-   ======================================== */
+/* Sections */
 section {
     background-color: var(--white);
     padding: var(--spacing-lg);
     margin-bottom: var(--spacing-lg);
-    border-radius: 8px;  /* Rounded corners */
+    border-radius: 8px;
     box-shadow: var(--shadow-sm);
 }
 
@@ -118,7 +115,7 @@ section h2 {
     color: var(--dark-gray);
     margin-bottom: var(--spacing-md);
     font-size: 1.5rem;
-    border-bottom: 2px solid var(--teal);  /* Teal underline */
+    border-bottom: 2px solid var(--teal);
     padding-bottom: var(--spacing-sm);
 }
 
@@ -129,77 +126,42 @@ section h3 {
 }
 
 /* ========================================
-   DASHBOARD STATS GRID
-   4 stat cards layout
+   DASHBOARD CARDS
    ======================================== */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));  /* Responsive grid */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: var(--spacing-md);
-    margin-bottom: var(--spacing-lg);
 }
 
 .stat-card {
-    background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+    background: linear-gradient(135deg, var(--teal), var(--teal-dark));
     color: var(--white);
     padding: var(--spacing-md);
     border-radius: 8px;
     text-align: center;
     box-shadow: var(--shadow-md);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;  /* Smooth animation */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .stat-card:hover {
-    transform: translateY(-4px);  /* Lift up on hover */
-    box-shadow: var(--shadow-lg);  /* Bigger shadow on hover */
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
 }
 
 .stat-card h3 {
     font-size: 0.9rem;
     margin-bottom: var(--spacing-xs);
     opacity: 0.9;
-    color: var(--white);
 }
 
 .stat-card p {
     font-size: 2rem;
     font-weight: bold;
-    margin: 0;
-}
-
-/* ========================================
-   BUDGET SECTION
-   Monthly budget input and status
-   ======================================== */
-.budget-section {
-    background-color: var(--light-gray);
-    padding: var(--spacing-md);
-    border-radius: 8px;
-    margin-top: var(--spacing-md);
-}
-
-.budget-section label {
-    display: block;
-    margin-bottom: var(--spacing-xs);
-    font-weight: 500;
-}
-
-.budget-section input {
-    width: 200px;
-    padding: var(--spacing-xs);
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-}
-
-#budget-status {
-    margin-top: var(--spacing-sm);
-    font-weight: 500;
 }
 
 /* ========================================
    FORMS
-   All form inputs and labels
    ======================================== */
 form {
     display: flex;
@@ -207,21 +169,12 @@ form {
     gap: var(--spacing-md);
 }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
-
 label {
     font-weight: 500;
     margin-bottom: var(--spacing-xs);
-    color: var(--text-dark);
 }
 
-input[type="text"],
-input[type="number"],
-input[type="date"],
-select {
+input, select {
     padding: var(--spacing-sm);
     border: 2px solid #ddd;
     border-radius: 4px;
@@ -229,69 +182,14 @@ select {
     transition: border-color 0.3s ease;
 }
 
-input:focus,
-select:focus {
+input:focus, select:focus {
     outline: none;
-    border-color: var(--teal);  /* Teal border when focused */
-    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);  /* Subtle glow */
-}
-
-/* Error messages */
-.error-message {
-    color: var(--error-red);
-    font-size: 0.875rem;
-    margin-top: var(--spacing-xs);
-    display: none;  /* Hidden by default, shown by JS */
-}
-
-.error-message[style*="block"] {
-    display: block;
+    border-color: var(--teal);
+    box-shadow: 0 0 0 3px rgba(32,201,151,0.1);
 }
 
 /* ========================================
-   BUTTONS
-   All button styles
-   ======================================== */
-button {
-    padding: var(--spacing-sm) var(--spacing-md);
-    background-color: var(--teal);
-    color: var(--white);
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.1s ease;
-}
-
-button:hover {
-    background-color: var(--teal-dark);
-    transform: translateY(-1px);  /* Subtle lift */
-}
-
-button:active {
-    transform: translateY(0);  /* Press down effect */
-}
-
-button:focus {
-    outline: 2px solid var(--teal);
-    outline-offset: 2px;
-}
-
-/* Delete button (red) */
-.btn-delete {
-    background-color: var(--error-red);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    font-size: 0.875rem;
-}
-
-.btn-delete:hover {
-    background-color: #dc2626;
-}
-
-/* ========================================
-   TRANSACTION DISPLAY
-   How transactions appear in the list
+   TRANSACTIONS
    ======================================== */
 #transaction-container {
     display: flex;
@@ -305,283 +203,86 @@ button:focus {
     border-radius: 8px;
     padding: var(--spacing-md);
     display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr auto;  /* Columns: desc, amount, category, date, button */
+    grid-template-columns: 2fr 1fr 1fr 1fr auto;
     gap: var(--spacing-sm);
     align-items: center;
-    transition: box-shadow 0.3s ease;
 }
 
 #transaction-container > div:hover {
-    box-shadow: var(--shadow-md);  /* Shadow on hover */
-}
-
-#transaction-container p {
-    margin: 0;
-}
-
-/* Empty state message */
-.empty-message {
-    text-align: center;
-    color: var(--text-light);
-    padding: var(--spacing-lg);
-    font-style: italic;
-}
-
-/* Highlight search matches */
-mark {
-    background-color: #fef08a;  /* Yellow highlight */
-    padding: 2px 4px;
-    border-radius: 2px;
+    box-shadow: var(--shadow-md);
 }
 
 /* ========================================
-   SORT & SEARCH CONTROLS
-   Dropdowns and search inputs
+   ABOUT PAGE
    ======================================== */
-.sort-controls,
-.search-controls {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-    margin-bottom: var(--spacing-md);
-    flex-wrap: wrap;
+.about-page {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--white);
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-.sort-controls select,
-.search-controls input[type="text"] {
-    flex: 1;
-    min-width: 200px;
+.about-page h2, .about-page h3 {
+    color: var(--teal);
 }
 
-.search-controls label {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-xs);
-    margin: 0;
-}
-
-#search-error {
-    color: var(--error-red);
-    font-size: 0.875rem;
-    width: 100%;
+.about-page p, .about-page li {
+    color: var(--text-dark);
+    line-height: 1.6;
 }
 
 /* ========================================
-   RESPONSIVE DESIGN - MOBILE FIRST
-   Adjustments for different screen sizes
+   BUTTONS
    ======================================== */
-
-/* Mobile (default styles above work for mobile) */
-
-/* Tablet (768px and up) */
-@media (min-width: 768px) {
-    header h1 {
-        font-size: 2rem;
-    }
-    
-    section {
-        padding: var(--spacing-xl);
-    }
-    
-    .stats-grid {
-        grid-template-columns: repeat(2, 1fr);  /* 2 columns on tablet */
-    }
-}
-
-/* Desktop (1024px and up) */
-@media (min-width: 1024px) {
-    .stats-grid {
-        grid-template-columns: repeat(4, 1fr);  /* 4 columns on desktop */
-    }
-    
-    header nav ul {
-        gap: var(--spacing-lg);
-    }
-}
-
-/* Small mobile (adjust transaction cards to stack) */
-@media (max-width: 640px) {
-    #transaction-container > div {
-        grid-template-columns: 1fr;  /* Stack everything vertically */
-        text-align: left;
-    }
-    
-    header h1 {
-        font-size: 1.5rem;
-    }
-    
-    .stat-card p {
-        font-size: 1.5rem;  /* Smaller on mobile */
-    }
-}
-
-/* ========================================
-   ACCESSIBILITY
-   Focus styles and screen reader helpers
-   ======================================== */
-.skip-link {
-    position: absolute;
-    top: -40px;
-    left: 0;
-    background: var(--teal);
+button {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--teal);
     color: var(--white);
-    padding: var(--spacing-xs);
-    text-decoration: none;
-    z-index: 100;
-}
-
-.skip-link:focus {
-    top: 0;  /* Show when focused (keyboard users) */
-}
-
-/* Hide visually but keep for screen readers */
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-}
-
-/* ==========
-    ADDITIONAL STYLES FOR SETTINGS MODAL
-    ======================================== */
-
-#settings {
-    display: none; /* Hidden by default */
-}
-
-#settings.show {
-    display: block; /* Show when class added */
-}
-/* Burger menu button (hidden on desktop) */
-.burger-menu {
-    display: none;
-    background: none;
     border: none;
-    color: white;
-    font-size: 1.5rem;
+    border-radius: 4px;
     cursor: pointer;
+    transition: transform 0.2s ease;
 }
 
-@media (max-width: 768px) {
-    .burger-menu {
-        display: block;
-    }
-    
-    header nav {
-        display: none; 
-    }
-    
-    header nav.active {
-        display: block; 
-    }
-}
-/* === Animation & Transition Enhancements === */
-
-/* Smooth transitions for interactive elements */
-button, .stat-card, header nav a, #transaction-container > div {
-    transition:
-        background 0.3s cubic-bezier(.4,0,.2,1),
-        color 0.2s,
-        box-shadow 0.3s,
-        transform 0.2s;
+button:hover {
+    transform: translateY(-2px);
+    background-color: var(--teal-dark);
 }
 
-/* Card and transaction hover "lift" effect */
-.stat-card:hover, #transaction-container > div:hover {
-    transform: translateY(-6px) scale(1.02);
-    box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+.btn-delete {
+    background-color: var(--error-red);
 }
 
-/* Button hover and active micro-interactions */
-button:hover, .btn-delete:hover {
-    filter: brightness(1.1);
-    transform: translateY(-2px) scale(1.03);
-}
-button:active {
-    transform: scale(0.98);
+.btn-delete:hover {
+    background-color: #b91c1c;
 }
 
-/* Navigation menu slide-down animation (for mobile) */
-header nav {
-    transition: max-height 0.4s cubic-bezier(.4,0,.2,1), opacity 0.3s;
-    overflow: hidden;
-    max-height: 0;
-    opacity: 0;
-}
-header nav.active {
-    max-height: 500px;
-    opacity: 1;
-}
-
-/* Focus ring for accessibility */
-button:focus, header nav a:focus {
-    outline: 2px solid var(--teal);
-    outline-offset: 2px;
-    box-shadow: 0 0 0 3px rgba(20,184,166,0.15);
-}
-
-/* Fade-in animation for cards and transactions */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-.stat-card, #transaction-container > div {
-    animation: fadeInUp 0.5s both;
-}
-/* === BURGER MENU FIXES === */
-
-/* Show the burger icon on smaller screens */
-.burger-menu {
-    display: none;
-    background: none;
-    border: none;
-    color: var(--white); /* ensure visible on dark header */
-    font-size: 1.8rem;
-    cursor: pointer;
-    position: absolute;
-    top: 20px;
-    right: 24px;
-    z-index: 110;
-}
-
-/* On mobile, hide the nav by default and show burger */
+/* ========================================
+   RESPONSIVE - MOBILE FIRST
+   ======================================== */
 @media (max-width: 768px) {
     .burger-menu {
         display: block;
     }
 
     header nav {
-        position: absolute;
-        top: 70px;
-        left: 0;
-        right: 0;
-        background-color: var(--dark-gray);
-        box-shadow: var(--shadow-md);
+        display: none;
         flex-direction: column;
-        align-items: center;
-        gap: 16px;
-        padding: 16px 0;
-        max-height: 0;
-        overflow: hidden;
-        opacity: 0;
-        transition: all 0.4s ease;
+        position: absolute;
+        top: 60px;
+        right: 10px;
+        width: 200px;
+        padding: 10px;
+        background-color: var(--dark-gray);
+        border-radius: 8px;
+        box-shadow: var(--shadow-md);
+        z-index: 999;
     }
 
     header nav.active {
-        max-height: 400px;
-        opacity: 1;
+        display: flex;
     }
 
     header nav ul {
@@ -591,15 +292,33 @@ button:focus, header nav a:focus {
     }
 
     header nav ul li a {
-        color: var(--white);
-        font-size: 1.1rem;
-        display: block;
         padding: 10px 0;
         text-align: center;
-        width: 100%;
     }
 
-    header nav ul li a:hover {
-        background-color: var(--teal-dark);
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #transaction-container > div {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Tablet */
+@media (min-width: 768px) {
+    section {
+        padding: var(--spacing-xl);
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    .stats-grid {
+        grid-template-columns: repeat(4, 1fr);
     }
 }
