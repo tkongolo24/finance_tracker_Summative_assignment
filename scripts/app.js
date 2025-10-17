@@ -3,8 +3,7 @@ import {
   addTransaction,
   deleteTransaction,
   generateId,
-  getTransactions,
-  sortTransactions
+  getTransactions
 } from './state.js';
 
 import {
@@ -27,17 +26,17 @@ import {
   updateDashboard,
   clearForm,
   showError,
-  clearError,
-  setFormToEditMode,
   setupCancelButton,
   setupBudgetPersistence
 } from './ui.js';
 
-// Globals
+// 🌍 GLOBALS
+
 let currentFilteredTransactions = null;
 let currentEditId = null;
 
-// Populate form for edit
+// ✏️ POPULATE FORM FOR EDIT
+
 function populateFormForEdit(id) {
   const transactions = getTransactions();
   const t = transactions.find(tx => tx.id === id);
@@ -53,14 +52,16 @@ function populateFormForEdit(id) {
   if (submitBtn) submitBtn.textContent = 'Update Transaction';
 }
 
-// Initialize
+// 🚀 INITIALIZE
+
 document.addEventListener('DOMContentLoaded', () => {
-  // Budget persistence
+  // Load saved budget
   const savedBudget = localStorage.getItem('budget');
   if (savedBudget) {
     document.getElementById('budget-cap').value = savedBudget;
   }
 
+  // 🔧 Initialize app
   initState();
   renderTransactions();
   updateDashboard();
@@ -69,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const container = document.getElementById('transaction-container');
 
-  // 🌙 Dark Mode
+  // DARK MODE
   const darkModeToggle = document.getElementById('dark-mode-toggle');
   if (darkModeToggle) {
     darkModeToggle.addEventListener('click', () => {
@@ -77,28 +78,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // ===== BURGER MENU TOGGLE =====
-document.addEventListener("DOMContentLoaded", () => {
-  const burgerBtn = document.getElementById("burger-btn");
-  const nav = document.querySelector("header nav");
-
+  // BURGER MENU TOGGLE (Fixed)
+  const burgerBtn = document.getElementById('burger-btn');
+  const nav = document.querySelector('header nav');
   if (burgerBtn && nav) {
-    burgerBtn.addEventListener("click", () => {
-      nav.classList.toggle("active");
+    burgerBtn.addEventListener('click', () => {
+      nav.classList.toggle('active');
     });
-
-    // Close menu when clicking a link (for mobile)
-    const links = nav.querySelectorAll("a");
+    const links = nav.querySelectorAll('a');
     links.forEach(link => {
-      link.addEventListener("click", () => {
-        nav.classList.remove("active");
+      link.addEventListener('click', () => {
+        nav.classList.remove('active');
       });
     });
   }
-});
 
-
-  // 📊 Charts (Chart.js)
+  // CHARTS (Chart.js)
   const topCategoryCtx = document.getElementById('top-category-graph')?.getContext('2d');
   const last7DaysCtx = document.getElementById('last-7-days-graph')?.getContext('2d');
 
@@ -117,43 +112,41 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  // Update chart data
   function updateGraphs() {
     if (!topCategoryChart || !last7DaysChart) return;
-
     const transactions = getTransactions();
 
-    // Top Category
+    // Top Category chart
     const categoryTotals = {};
     transactions.forEach(t => {
       categoryTotals[t.category] = (categoryTotals[t.category] || 0) + t.amount;
     });
-
     topCategoryChart.data.labels = Object.keys(categoryTotals);
     topCategoryChart.data.datasets[0].data = Object.values(categoryTotals);
     topCategoryChart.update();
 
-    // Last 7 Days
+    // Last 7 Days chart
     const today = new Date();
-    const last7DaysLabels = [];
-    const last7DaysData = [];
+    const labels = [];
+    const data = [];
     for (let i = 6; i >= 0; i--) {
       const day = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
-      const dayStr = day.toISOString().split('T')[0];
-      last7DaysLabels.push(dayStr);
-      const daySpent = transactions
-        .filter(t => t.date === dayStr)
+      const dateStr = day.toISOString().split('T')[0];
+      labels.push(dateStr);
+      const dailySpent = transactions
+        .filter(t => t.date === dateStr)
         .reduce((sum, t) => sum + t.amount, 0);
-      last7DaysData.push(daySpent);
+      data.push(dailySpent);
     }
-
-    last7DaysChart.data.labels = last7DaysLabels;
-    last7DaysChart.data.datasets[0].data = last7DaysData;
+    last7DaysChart.data.labels = labels;
+    last7DaysChart.data.datasets[0].data = data;
     last7DaysChart.update();
   }
 
   updateGraphs();
 
-  // ✏️ Edit/Delete
+  //  Edit/Delete Transaction
   container.addEventListener('click', e => {
     if (e.target.classList.contains('btn-edit')) {
       populateFormForEdit(e.target.dataset.id);
@@ -161,26 +154,28 @@ document.addEventListener("DOMContentLoaded", () => {
       deleteTransaction(e.target.dataset.id);
       renderTransactions();
       updateDashboard();
+      updateGraphs();
     }
   });
 
-  // 📝 Form submit
+  // Handle form submission
   const form = document.getElementById('Add-form');
   form.addEventListener('submit', e => handleFormSubmit(e, updateGraphs));
 
-  // 💰 Budget input
+  // Budget input
   const budgetInput = document.getElementById('budget-cap');
   budgetInput.addEventListener('input', e => {
     localStorage.setItem('budget', e.target.value);
     updateDashboard();
   });
 
-  // 🔍 Search
+  // Search
   document.getElementById('search-btn').addEventListener('click', handleSearch);
   document.getElementById('clear-search-btn').addEventListener('click', handleClearSearch);
 });
 
-// ✅ Handle form submission
+// HANDLE FORM SUBMISSION
+
 function handleFormSubmit(event, updateGraphs) {
   event.preventDefault();
 
@@ -212,9 +207,7 @@ function handleFormSubmit(event, updateGraphs) {
     updatedAt: new Date().toISOString()
   };
 
-  if (currentEditId) {
-    deleteTransaction(currentEditId);
-  }
+  if (currentEditId) deleteTransaction(currentEditId);
 
   addTransaction(newTransaction);
   saveTransactions(getTransactions());
@@ -227,7 +220,8 @@ function handleFormSubmit(event, updateGraphs) {
   document.querySelector('#Add-form button[type="submit"]').textContent = 'Save';
 }
 
-// ✅ Search
+// SEARCH SYSTEM
+
 function handleSearch() {
   const pattern = document.getElementById('search-input').value.trim();
   const isCaseSensitive = document.getElementById('case-sensitive').checked;
@@ -279,3 +273,64 @@ function renderFilteredResults(transactions, regex) {
     `)
     .join('');
 }
+
+// IMPORT / EXPORT SYSTEM
+
+// Handle Export
+document.addEventListener('DOMContentLoaded', () => {
+  const exportBtn = document.getElementById('export-btn');
+  const importInput = document.getElementById('import-file');
+  const importStatus = document.getElementById('import-status');
+
+  if (exportBtn) {
+    exportBtn.addEventListener('click', () => {
+      const transactions = getTransactions();
+      const json = JSON.stringify(transactions, null, 2);
+      const blob = new Blob([json], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'student_finance_data.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      importStatus.textContent = 'Data exported successfully!';
+      setTimeout(() => (importStatus.textContent = ''), 3000);
+    });
+  }
+
+  // Handle Import
+  if (importInput) {
+    importInput.addEventListener('change', event => {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          const data = JSON.parse(e.target.result);
+          if (Array.isArray(data)) {
+            // Save to localStorage and update UI
+            localStorage.setItem('finance_tracker_data', JSON.stringify(data));
+            renderTransactions();
+            updateDashboard();
+            importStatus.textContent = 'Data imported successfully!';
+          } else {
+            importStatus.textContent = 'Invalid file format.';
+          }
+        } catch (err) {
+          console.error('Import error:', err);
+          importStatus.textContent = 'Failed to import file.';
+        }
+
+        // Clear file input so same file can be re-imported later
+        importInput.value = '';
+        setTimeout(() => (importStatus.textContent = ''), 3000);
+      };
+      reader.readAsText(file);
+    });
+  }
+});
