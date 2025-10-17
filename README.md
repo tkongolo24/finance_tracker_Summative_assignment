@@ -29,17 +29,22 @@ A simple web app that helps students track their daily spending, view statistics
 finance-tracker/
 ├── index.html
 ├── about.html
-├── styles.css
 └── scripts/
-└── app.js
+    └── app.js
+    └── ui.js
+    └── validators.js
+    └── state.js
+    └── search.js
+└── styles.css
+    └── styles.css
+    
+
 
 
 ---
 
 ## 🌍 Live Demo
-👉 [**View the Live Site**](https://<your-username>.github.io/finance-tracker/)
-
-> Replace `<your-username>` with your actual GitHub username.
+👉 [**View the Live Site**](https://tkongolo24.github.io/finance_tracker_Summative_assignment/
 
 ---
 
@@ -47,4 +52,21 @@ finance-tracker/
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/<your-username>/finance-tracker.git
+   git clone https://github.com/tkongolo24/finance_tracker_Summative_assignment.git
+
+   Navigate to the Folder
+cd finance-tracker
+
+Open the App
+
+Simply open index.html in your browser — no installation needed!
+
+💡 Future Improvements
+
+🔐 Add login and user accounts
+
+☁️ Connect to a backend (Firebase/Supabase)
+
+📈 Generate monthly PDF reports
+
+🧠 Add AI-driven budgeting suggestions
