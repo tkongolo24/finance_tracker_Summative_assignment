@@ -481,3 +481,62 @@ mark {
         display: block; 
     }
 }
+/* === Animation & Transition Enhancements === */
+
+/* Smooth transitions for interactive elements */
+button, .stat-card, header nav a, #transaction-container > div {
+    transition:
+        background 0.3s cubic-bezier(.4,0,.2,1),
+        color 0.2s,
+        box-shadow 0.3s,
+        transform 0.2s;
+}
+
+/* Card and transaction hover "lift" effect */
+.stat-card:hover, #transaction-container > div:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+}
+
+/* Button hover and active micro-interactions */
+button:hover, .btn-delete:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px) scale(1.03);
+}
+button:active {
+    transform: scale(0.98);
+}
+
+/* Navigation menu slide-down animation (for mobile) */
+header nav {
+    transition: max-height 0.4s cubic-bezier(.4,0,.2,1), opacity 0.3s;
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+}
+header nav.active {
+    max-height: 500px;
+    opacity: 1;
+}
+
+/* Focus ring for accessibility */
+button:focus, header nav a:focus {
+    outline: 2px solid var(--teal);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 3px rgba(20,184,166,0.15);
+}
+
+/* Fade-in animation for cards and transactions */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.stat-card, #transaction-container > div {
+    animation: fadeInUp 0.5s both;
+}
