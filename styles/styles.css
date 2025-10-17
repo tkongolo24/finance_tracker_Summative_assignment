@@ -540,3 +540,66 @@ button:focus, header nav a:focus {
 .stat-card, #transaction-container > div {
     animation: fadeInUp 0.5s both;
 }
+/* === BURGER MENU FIXES === */
+
+/* Show the burger icon on smaller screens */
+.burger-menu {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--white); /* ensure visible on dark header */
+    font-size: 1.8rem;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    z-index: 110;
+}
+
+/* On mobile, hide the nav by default and show burger */
+@media (max-width: 768px) {
+    .burger-menu {
+        display: block;
+    }
+
+    header nav {
+        position: absolute;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background-color: var(--dark-gray);
+        box-shadow: var(--shadow-md);
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        padding: 16px 0;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
+        transition: all 0.4s ease;
+    }
+
+    header nav.active {
+        max-height: 400px;
+        opacity: 1;
+    }
+
+    header nav ul {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+
+    header nav ul li a {
+        color: var(--white);
+        font-size: 1.1rem;
+        display: block;
+        padding: 10px 0;
+        text-align: center;
+        width: 100%;
+    }
+
+    header nav ul li a:hover {
+        background-color: var(--teal-dark);
+    }
+}
