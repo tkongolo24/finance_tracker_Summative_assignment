@@ -2,7 +2,6 @@
 
 A simple web app that helps students track their daily spending, view statistics, and stay within their budget.
 
-![screenshot](https://raw.githubusercontent.com/<your-username>/finance-tracker/main/screenshot.png)
 
 ---
 
@@ -44,7 +43,7 @@ finance-tracker/
 ---
 
 ## 🌍 Live Demo
-👉 [**View the Live Site**](https://tkongolo24.github.io/finance_tracker_Summative_assignment/
+👉 [**https://youtu.be/ZHJyD76GChY**](https://tkongolo24.github.io/finance_tracker_Summative_assignment/)
 
 ---
 
