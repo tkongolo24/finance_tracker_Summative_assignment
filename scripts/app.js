@@ -30,6 +30,8 @@ import {
   setupBudgetPersistence
 } from './ui.js';
 
+import { initTheme } from './theme.js';
+
 // 🌍 GLOBALS
 
 let currentFilteredTransactions = null;
@@ -62,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // 🔧 Initialize app
+  initTheme();
   initState();
   renderTransactions();
   updateDashboard();
