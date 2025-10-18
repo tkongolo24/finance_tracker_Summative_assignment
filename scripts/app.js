@@ -175,6 +175,28 @@ document.addEventListener('DOMContentLoaded', () => {
   // Search
   document.getElementById('search-btn').addEventListener('click', handleSearch);
   document.getElementById('clear-search-btn').addEventListener('click', handleClearSearch);
+
+  // Theme Toggle
+    const themeBtn = document.getElementById('theme-toggle');
+    if (themeBtn) {
+        // Check saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        
+        // Update button emoji
+        themeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+        
+        // Toggle on click
+        themeBtn.addEventListener('click', function() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            themeBtn.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        });
+    }
 });
 
 // HANDLE FORM SUBMISSION
@@ -337,3 +359,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+// Theme toggle at the end
+    const themeToggle = document.getElementById('theme-toggle');
+    if (themeToggle) {
+        const html = document.documentElement;
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        
+        themeToggle.addEventListener('click', function() {
+            const current = html.getAttribute('data-theme');
+            const newTheme = current === 'light' ? 'dark' : 'light';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+    } else {
+        console.log('Theme toggle button not found!');
+    }
+
+
